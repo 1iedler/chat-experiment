@@ -15,12 +15,15 @@ if (annyang) {
   annyang.setLanguage('de-DE');
   var r= document.getElementById('results')
   var befehl = function(name){
+	annyang.abort();
 	var antwort = "Deine Mutter heißt " + name + ". Lulz! Ich bin ab jetzt ein Echo, hihi."
 	//document.getElementById("inhalt").innerHTML += name + " ist ein schöner Name"; 
 	
 	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
+	setTimeout(function(){ annyang.start(); }, 8500);
   }
   var direkt = function(name){
+	annyang.abort();
 	var antwort = name;
 	//antwort = name.split(" ");
 	//antwort = antwort[antwort.length-1];
@@ -28,6 +31,8 @@ if (annyang) {
 	//antwort = antwort + " huuiui " + antwort;
 	antwort += " " + antwort;
 	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
+	setTimeout(function(){ annyang.start(); }, 5000);
+ 
   }
   var commands = {
 	'mein name ist *name': befehl,
@@ -37,7 +42,8 @@ if (annyang) {
   };
 
   annyang.addCommands(commands);
-  annyang.start();
+  setTimeout(function(){ annyang.start(); }, 3000);
+  
 }
 </script>
 </body>
