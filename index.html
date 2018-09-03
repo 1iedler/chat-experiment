@@ -8,7 +8,7 @@
 
 <h1>KI Test</h1>
 <p> Bitte Mikrofon und Lautsprecher anschalten. Sonst funktioniert es nicht. Und Chrome hernehmen.
-<iframe id="soundframe" style="height:0px; width:0px;" src="http://translate.google.com/translate_tts?tl=de&q=Hallo%20wie%20hei%C3%9Ft%20du&client=tw-ob"></iframe>
+<iframe id="soundframe" style="height:0px; width:0px;" src="https://translate.google.com/translate_tts?tl=de&q=Hallo%20wie%20hei%C3%9Ft%20du&client=tw-ob"></iframe>
    
 <script>
 if (annyang) {
@@ -18,7 +18,7 @@ if (annyang) {
 	var antwort = "Deine Mutter heißt " + name + ". Lulz! Ich bin ab jetzt ein Echo, hihi."
 	//document.getElementById("inhalt").innerHTML += name + " ist ein schöner Name"; 
 	
-	document.getElementById("soundframe").src = "http://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
+	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
   }
   var direkt = function(name){
 	var antwort = name;
@@ -27,7 +27,7 @@ if (annyang) {
 	//antwort = antwort.substring(1, antwort.length);
 	//antwort = antwort + " huuiui " + antwort;
 	antwort += " " + antwort;
-	document.getElementById("soundframe").src = "http://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
+	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
   }
   var commands = {
 	'mein name ist *name': befehl,
