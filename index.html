@@ -6,8 +6,8 @@
 </head>
 <body>
 
-<h1>KI Test</h1>
-<p> Bitte Mikrofon und Lautsprecher anschalten. Sonst funktioniert es nicht. Und Chrome hernehmen.
+<h1>KI Test 3</h1>
+<p id="inhalt">Bitte Mikrofon und Lautsprecher anschalten. Sonst funktioniert es nicht. Und Chrome hernehmen.</p>
 <iframe id="soundframe" style="height:0px; width:0px;" src="https://translate.google.com/translate_tts?tl=de&q=Hallo%20wie%20hei%C3%9Ft%20du&client=tw-ob"></iframe>
    
 <script>
@@ -17,10 +17,9 @@ if (annyang) {
   var befehl = function(name){
 	annyang.abort();
 	var antwort = "Deine Mutter heißt " + name + ". Lulz! Ich bin ab jetzt ein Echo, hihi."
-	//document.getElementById("inhalt").innerHTML += name + " ist ein schöner Name"; 
-	
+	document.getElementById("inhalt").innerHTML = antwort; 
 	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
-	setTimeout(function(){ annyang.start(); }, 8500);
+	setTimeout(function(){ annyang.start(); document.getElementById("inhalt").innerHTML = "Bitte rede jetzt mit mir!";  }, 8500);
   }
   var direkt = function(name){
 	annyang.abort();
@@ -30,8 +29,9 @@ if (annyang) {
 	//antwort = antwort.substring(1, antwort.length);
 	//antwort = antwort + " huuiui " + antwort;
 	antwort += " " + antwort;
+	document.getElementById("inhalt").innerHTML = antwort; 
 	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
-	setTimeout(function(){ annyang.start(); }, 5000);
+	setTimeout(function(){ annyang.start(); document.getElementById("inhalt").innerHTML = "Bitte rede jetzt mit mir!"; }, 5000);
  
   }
   var commands = {
@@ -42,7 +42,7 @@ if (annyang) {
   };
 
   annyang.addCommands(commands);
-  setTimeout(function(){ annyang.start(); }, 3000);
+  setTimeout(function(){ annyang.start(); document.getElementById("inhalt").innerHTML = "Bitte rede jetzt mit mir!"; }, 3000);
   
 }
 </script>
