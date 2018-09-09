@@ -6,45 +6,121 @@
 </head>
 <body>
 
-<h1>KI Test 3</h1>
-<p id="inhalt">Bitte Mikrofon und Lautsprecher anschalten. Sonst funktioniert es nicht. Und Chrome hernehmen.</p>
-<iframe id="soundframe" style="height:0px; width:0px;" src="https://translate.google.com/translate_tts?tl=de&q=Hallo%20wie%20hei%C3%9Ft%20du&client=tw-ob"></iframe>
+<h1>KI Test 5</h1>
+<div id="inhalt"></div>
+<div id="sprachbefehl">...</div>
+<div id="befehle">Befehle laden...</div>
+<!--iframe id="soundframe" style="height:0px; width:0px;" src=""></iframe-->
+<audio id="soundframe" controls>
+  <source id="soundframesrc" src="" type="audio/mpeg">
+</audio>
    
 <script>
-if (annyang) {
-  annyang.setLanguage('de-DE');
-  var r= document.getElementById('results')
-  var befehl = function(name){
-	annyang.abort();
-	var antwort = "Deine Mutter heißt " + name + ". Lulz! Ich bin ab jetzt ein Echo, hihi."
-	document.getElementById("inhalt").innerHTML = antwort; 
-	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
-	setTimeout(function(){ annyang.start(); document.getElementById("inhalt").innerHTML = "Bitte rede jetzt mit mir!";  }, 8500);
+  function isSpracherkennung() {
+	if (annyang) {
+	  return true;
+	}
   }
-  var direkt = function(name){
-	annyang.abort();
+  function isSprachausgabe() {
+	return true;
+  }
+  function spracherkennungPausieren() {
+	if (isSpracherkennung()) {
+	  annyang.abort();
+	}
+  }
+  function spracherkennungStarten() {
+	if (isSpracherkennung()) {
+	  annyang.start();
+	  document.getElementById("sprachbefehl").innerHTML = "Bitte rede jetzt mit mir!";
+	}
+  }
+  function inhaltSetzen(antwort) {
+    document.getElementById("inhalt").innerHTML = antwort;
+	if (isSprachausgabe()) {
+		var sound = document.getElementById("soundframe")
+		document.getElementById("soundframesrc").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob";
+		sound.load();
+		sound.play();
+		if (isSpracherkennung()) {
+			sound.addEventListener("ended", function(){spracherkennungStarten();}, false);
+		}
+	} else {
+		spracherkennungStarten();
+	}
+  }
+  function refresh() {
+	  document.getElementById("befehle").innerHTML = "";
+	  for (var key in commands) {
+		document.getElementById("befehle").innerHTML += "<p onclick=\"commands['" + key + "']('test')\">" + key + "</p>";
+	  }
+  }
+  
+  
+  
+  
+// Anfangsfrage
+  var nameGesagt = function(name){
+	spracherkennungPausieren();
+	var antwort = "Hallo " + name + ". Freut mich, dass wir miteinander Reden.";
+	inhaltSetzen(antwort);
+	//aktiviereGutJaNein();
+  }
+  var nameFallback = function(name){
+	spracherkennungPausieren();
 	var antwort = name;
-	//antwort = name.split(" ");
-	//antwort = antwort[antwort.length-1];
-	//antwort = antwort.substring(1, antwort.length);
-	//antwort = antwort + " huuiui " + antwort;
-	antwort += " " + antwort;
-	document.getElementById("inhalt").innerHTML = antwort; 
-	document.getElementById("soundframe").src = "https://translate.google.com/translate_tts?tl=de&q=" + encodeURI(antwort) + "&client=tw-ob"
-	setTimeout(function(){ annyang.start(); document.getElementById("inhalt").innerHTML = "Bitte rede jetzt mit mir!"; }, 5000);
- 
+	inhaltSetzen(antwort);
+	//aktiviereGutJaNein();
   }
-  var commands = {
-	'mein name ist *name': befehl,
-	'ich heiße *name': befehl,
-	'ich bin (der) (die) *name': befehl,
-    '*name': direkt
+  var commandsStandard = {
+	'mein name ist *name': nameGesagt,
+	'ich heiße *name': nameGesagt,
+	'ich bin (der) (die) *name': nameGesagt,
+    '*name': nameFallback
+  };
+  var commands = commandsStandard;
+  var aktiviereStandard = function() {
+	commands = commandsStandard;
+	annyang.removeCommands();
+	annyang.addCommands(commands);
+	refresh();
   };
 
-  annyang.addCommands(commands);
-  setTimeout(function(){ annyang.start(); document.getElementById("inhalt").innerHTML = "Bitte rede jetzt mit mir!"; }, 3000);
+// BEISPIEL
+// Geht es dir gut? Ja/Nein
+  var gutJa = function(name){
+	spracherkennungPausieren();
+	var antwort = "Was willst du dann hier? Verpiss dich!";
+	inhaltSetzen(antwort);
+	aktiviereStandard();
+  }
+  var gutNein = function(name){
+	spracherkennungPausieren();
+	var antwort = "Das ist natürlich schade.";
+	inhaltSetzen(antwort);
+	aktiviereStandard();
+  }
+  var commandsGutJaNein = {
+	'ja': gutJa,
+	'nein': gutNein,
+    '*name': nameFallback
+  };
+  var aktiviereGutJaNein = function() {
+	commands = commandsGutJaNein;
+	annyang.removeCommands();
+	annyang.addCommands(commands);
+	refresh();
+  };
   
-}
+  
+  
+  if (isSpracherkennung()) {
+    annyang.setLanguage('de-DE');
+    var r = document.getElementById('results');
+    annyang.addCommands(commands);
+  }
+  inhaltSetzen("Hallo, wie ist dein Name?");
+  refresh();
 </script>
 </body>
 </html>
